@@ -26,4 +26,6 @@ Here are the following things that needs to be done:
 - Flutter
 - Firebase
 
-## Possible mentors: Souvik Guria
+## Possible mentors: 
+
+- Souvik Guria
