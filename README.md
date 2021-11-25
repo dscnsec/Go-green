@@ -1,6 +1,9 @@
 # Go-green
 
-It is a simple task based game app
+We know that there is so much pollution around but what are we doing to counteract matters the most. We all know what steps are necessary to be taken but in this fast moving world, we mostly get unaware of our environment. So, we are bringing an idea that could change this maybe in a minimal way, but even a small change at large scale can make a big change one day.
+It is a game app where user have to complete some tasks suggested by the app. The tasks will be given randomly to the users and all the tasks will revolve around keeping our enviroment safe, clean and pollution free. The main idea of this app is to engage people in making small changes towards a pollution free environment in a fun and interesting way.
+
+Here are the following things that needs to be done:
 
 - User will receive a regulated number of task on daily basis.
 
@@ -15,3 +18,12 @@ It is a simple task based game app
 - Users will need to upload a small video clip or a picture of them doing their task.
 
 - Your app should have camera access and storage access.
+
+- You can also bring your own ideas to make this game app cool and interesting.
+
+## Required Tech Stack
+
+- Flutter
+- Firebase
+
+## Possible mentors: Souvik Guria
