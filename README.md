@@ -26,6 +26,14 @@ Here are the following things that needs to be done:
 - Flutter
 - Firebase
 
+##### What to include in proposals ?
+Apart from your personal details and your experience. You should include the following in your proposal :-
+
+- Your understanding about the project idea.
+- List of ideas you want to implement and a brief description of your approach.
+- Any ideas you want to suggest/add.
+- mockups and wireframe for the UI of the app.
+
 ## Possible mentors: 
 
 - Souvik Guria
