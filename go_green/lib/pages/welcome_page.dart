@@ -21,7 +21,7 @@ class _WelcomePage extends State<WelcomePage>{
                       fit: BoxFit.contain,
                       scale: 4,
                       ),
-                      transform: Matrix4.translationValues(55, 0, 0)                 
+                      transform: Matrix4.translationValues(65, 0, 0)                 
                     ),
                     Container(
                       //top: 32,
@@ -32,7 +32,7 @@ class _WelcomePage extends State<WelcomePage>{
                           fontWeight: FontWeight.w700,
                           color: Colors.grey[700]
                         )),
-                        transform: Matrix4.translationValues(30, -65, 0)                 
+                        transform: Matrix4.translationValues(35, -65, 0)                 
                         ),
                   ],
           );
