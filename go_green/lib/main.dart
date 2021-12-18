@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_green/utils/routes.dart';
-import 'pages/login_page.dart';
+import 'pages/welcome_page.dart';
 
 void main() {
   runApp(GoGreen());
@@ -12,10 +12,15 @@ class GoGreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: Colors.grey.shade200,
+        fontFamily: 'Roboto',
+      ),
       initialRoute: "/",
       routes: {
-        "/": (context) => LoginPage(),
-        MyRoutes.loginRoute : (context) => LoginPage(),
+        "/": (context) => WelcomePage(),
+        MyRoutes.welcomeRoute : (context) => WelcomePage(),
       }
     );
   }
