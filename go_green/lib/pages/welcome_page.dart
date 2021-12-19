@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:go_green/login_controller.dart';
+import 'package:go_green/utils/routes.dart';
 
 class WelcomePage extends StatefulWidget{
   const WelcomePage({Key? key}) : super(key: key);
@@ -8,7 +11,7 @@ class WelcomePage extends StatefulWidget{
 }
 
 class _WelcomePage extends State<WelcomePage>{
-
+  
   Widget _loginBanner(){
 
           return Row(
@@ -21,7 +24,7 @@ class _WelcomePage extends State<WelcomePage>{
                       fit: BoxFit.contain,
                       scale: 4,
                       ),
-                      transform: Matrix4.translationValues(60, 0, 0)                 
+                      transform: Matrix4.translationValues(65, 0, 0)                 
                     ),
                     Container(
                       //top: 32,
@@ -37,6 +40,13 @@ class _WelcomePage extends State<WelcomePage>{
                   ],
           );
   }
+
+  //asynchronus func to wait for signin to complete before moving forward to nav
+  Future<void> googleLoginIn() async{
+    final controller = Get.put(LoginController());
+    await controller.login();
+    Navigator.pushNamed(context, MyRoutes.aboutRoute);
+    }
 
   Widget _loginWithEmail(BuildContext context){
 
@@ -89,22 +99,24 @@ class _WelcomePage extends State<WelcomePage>{
                 height: 20,
               ),
               ElevatedButton(
-                onPressed: (){}, 
-                 
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  Image.asset(
-                    'assets/icons/g_icon.png',
-                     width: 18,
-                     height: 18,
+                onPressed: (){
+                  googleLoginIn();
+                }, 
+
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                    Image.asset(
+                      'assets/icons/g_icon.png',
+                       width: 18,
+                       height: 18,
+                      ),
+                    const SizedBox(
+                      width: 10,
                     ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  const Text('Login with Google'),
-                    ],
-                  ),
+                    const Text('Login with Google'),
+                      ],
+                    ),
                   
                   style: ElevatedButton.styleFrom(
                     textStyle: const TextStyle(
