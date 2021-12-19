@@ -21,7 +21,7 @@ class _WelcomePage extends State<WelcomePage>{
                       fit: BoxFit.contain,
                       scale: 4,
                       ),
-                      transform: Matrix4.translationValues(65, 0, 0)                 
+                      transform: Matrix4.translationValues(60, 0, 0)                 
                     ),
                     Container(
                       //top: 32,
@@ -96,8 +96,8 @@ class _WelcomePage extends State<WelcomePage>{
                   children: [
                   Image.asset(
                     'assets/icons/g_icon.png',
-                     width: 16,
-                     height: 16,
+                     width: 18,
+                     height: 18,
                     ),
                   const SizedBox(
                     width: 10,
@@ -117,7 +117,8 @@ class _WelcomePage extends State<WelcomePage>{
                   shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6),
                 ),  
-                  maximumSize: const Size(190, 40),
+                  minimumSize: const Size(80, 40),
+                  maximumSize: const Size(190, 80),
                ),
               ), 
       ]);
@@ -136,8 +137,8 @@ class _WelcomePage extends State<WelcomePage>{
              crossAxisAlignment: CrossAxisAlignment.center,
              mainAxisAlignment: MainAxisAlignment.start,
              children: [
-               const SizedBox(
-                 height: 70,
+               SizedBox(
+                 height: MediaQuery.of(context).size.height*0.16,
                ),
               Flexible(
                 child: Container(
