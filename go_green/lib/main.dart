@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_green/pages/about_page.dart';
+import 'package:go_green/pages/home_page.dart';
 import 'package:go_green/utils/routes.dart';
 import 'pages/welcome_page.dart';
 
@@ -23,6 +24,7 @@ class GoGreen extends StatelessWidget{
       routes: {
         "/": (context) => WelcomePage(),
         MyRoutes.welcomeRoute : (context) => WelcomePage(),
+        MyRoutes.homeRoute : (context) => HomePage(),
         MyRoutes.aboutRoute : (context) => AboutPage(),
       }
     );
