@@ -11,7 +11,11 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  
+    //*************************************************************//
+   //            blank login page for email login users           //
+  //*************************************************************//
+
+
    @override
   Widget build(BuildContext context) {
     var input;
