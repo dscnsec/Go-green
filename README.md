@@ -37,4 +37,3 @@ Apart from your personal details and your experience. You should include the fol
 ## Possible mentors: 
 
 - [Souvik Guria](https://www.github.com/devSouvik)
-- [Faruque Aziz](https://github.com/frk611)
