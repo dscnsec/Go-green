@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:go_green/login_controller.dart';
+import 'package:go_green/provider/google_sign_in.dart';
 import 'package:go_green/utils/routes.dart';
+import 'package:provider/provider.dart';
 
 class WelcomePage extends StatefulWidget{
   const WelcomePage({Key? key}) : super(key: key);
@@ -41,12 +41,6 @@ class _WelcomePage extends State<WelcomePage>{
           );
   }
 
-  //asynchronus func to wait for signin to complete before moving forward to nav
-  Future<void> googleLoginIn() async{
-    final controller = Get.put(LoginController());
-    await controller.login();
-    Navigator.pushNamed(context, MyRoutes.aboutRoute);
-    }
 
   Widget _loginWithEmail(BuildContext context){
 
@@ -99,8 +93,10 @@ class _WelcomePage extends State<WelcomePage>{
                 height: 20,
               ),
               ElevatedButton(
-                onPressed: (){
-                  googleLoginIn();
+                onPressed: () {
+                  final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+                  provider.googleLogin();
+                  Navigator.pushNamed(context, MyRoutes.aboutRoute) ;
                 }, 
 
                   child: Row(
