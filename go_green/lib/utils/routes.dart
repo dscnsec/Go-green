@@ -1,6 +1,6 @@
 class MyRoutes {
   static String welcomeRoute = "/welcome";
-  static String homeRoute="/home";
+  static String taskPage="/task";
   static String aboutRoute = "/about";
 
 }

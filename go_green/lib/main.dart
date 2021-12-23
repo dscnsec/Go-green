@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:go_green/firebase_options.dart';
+import 'package:go_green/gogreen_home.dart';
 import 'package:go_green/pages/about_page.dart';
-import 'package:go_green/pages/home_page.dart';
+import 'package:go_green/pages/task_page.dart';
 import 'package:go_green/provider/google_sign_in.dart';
 import 'package:go_green/utils/routes.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +14,7 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(GoGreen());
+  runApp(const GoGreen());
 }
 
 class GoGreen extends StatelessWidget{
@@ -31,10 +32,10 @@ class GoGreen extends StatelessWidget{
         ),
         initialRoute: "/",
         routes: {
-          "/": (context) => WelcomePage(),
-          MyRoutes.welcomeRoute : (context) => WelcomePage(),
-          MyRoutes.homeRoute : (context) => HomePage(),
-          MyRoutes.aboutRoute : (context) => AboutPage(),
+          "/": (context) => const GoGreenHome(),
+          MyRoutes.welcomeRoute : (context) => const WelcomePage(),
+          MyRoutes.taskPage : (context) => TaskPage(),
+          MyRoutes.aboutRoute : (context) => const AboutPage(),
         }
       ),
     );

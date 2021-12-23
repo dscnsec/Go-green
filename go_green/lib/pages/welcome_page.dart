@@ -96,7 +96,7 @@ class _WelcomePage extends State<WelcomePage>{
                 onPressed: () {
                   final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
                   provider.googleLogin();
-                  Navigator.pushNamed(context, MyRoutes.aboutRoute) ;
+                  
                 }, 
 
                   child: Row(
