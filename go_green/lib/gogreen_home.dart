@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_green/pages/about_page.dart';
-import 'package:go_green/pages/task_page.dart';
 import 'package:go_green/pages/welcome_page.dart';
+
+import 'nav_bar.dart';
 
 class GoGreenHome extends StatefulWidget {
   const GoGreenHome({Key? key}) : super(key: key);
@@ -12,6 +12,8 @@ class GoGreenHome extends StatefulWidget {
 }
 
 class _GoGreenHomeState extends State<GoGreenHome> {
+
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,8 +25,8 @@ class _GoGreenHomeState extends State<GoGreenHome> {
             }
             else if (snapshot.hasData){
               debugPrint('snapshot.hasData = $snapshot.hasData');
-              return AboutPage();
-            }
+              return const NavBar();
+             }
             else if(snapshot.hasError){
               return const Center(
                 child: Text(
@@ -38,6 +40,7 @@ class _GoGreenHomeState extends State<GoGreenHome> {
             return const WelcomePage();
           },
      ),
-    );
+       );
   }
 }
+

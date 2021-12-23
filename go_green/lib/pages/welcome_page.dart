@@ -96,7 +96,6 @@ class _WelcomePage extends State<WelcomePage>{
                 onPressed: () {
                   final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
                   provider.googleLogin();
-                  
                 }, 
 
                   child: Row(
