@@ -25,11 +25,11 @@ class _NavBarState extends State<NavBar> {
            ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
           child: GNav(
             tabBorderRadius: 10,
-            tabBackgroundColor: Colors.grey[100]!,
-            rippleColor: Colors.grey[100]!,
+            tabBackgroundColor: Colors.white,
+            rippleColor: Colors.white,
             gap: 8,
             activeColor: Colors.lightGreen,
             color: Colors.lightGreen,

@@ -27,7 +27,7 @@ class GoogleSignInProvider extends ChangeNotifier {
 
     await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (e){
-      print(e.toString());
+      debugPrint(e.toString());
     }
 
     notifyListeners();
