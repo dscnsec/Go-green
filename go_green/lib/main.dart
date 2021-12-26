@@ -14,11 +14,11 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const GoGreen());
+  runApp(GoGreen());
 }
 
 class GoGreen extends StatelessWidget{
-  const GoGreen({Key? key}) : super(key: key);
+  GoGreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +29,11 @@ class GoGreen extends StatelessWidget{
           brightness: Brightness.light,
           scaffoldBackgroundColor: Colors.grey.shade200,
           fontFamily: 'Roboto',
+          checkboxTheme: CheckboxThemeData(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5)
+              )
+          )
         ),
         initialRoute: "/",
         routes: {
