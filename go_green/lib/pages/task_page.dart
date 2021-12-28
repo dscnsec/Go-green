@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_green/database.dart';
 
 class TaskPage extends StatefulWidget {
   const TaskPage({Key? key}) : super(key: key);
@@ -8,7 +9,10 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
-  var _score=0;
+ 
+  int totalScore=0;
+  Map<String, bool> taskList={};
+
 
   Widget _taskScoreBoard({required int score}){
 
@@ -67,14 +71,9 @@ class _TaskPageState extends State<TaskPage> {
     );
   }
 
-  final Map<String, bool> _tasks= {
-    'Reuse scrap paper. Print on two sides, or use back side of used paper.': false,
-    'Wash cars or bikes with bucket of water instead of water jet sprays.': false,
-    'Pass down your old bike, skates and other toys or donate to a local charity.': false,
-  };
 
-  Widget taskList(){
 
+  Widget taskContainer(BuildContext context){
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,58 +92,99 @@ class _TaskPageState extends State<TaskPage> {
         const SizedBox(
             height: 20, 
           ),
-        ListView(
-          shrinkWrap: true,
-          children: _tasks.keys.map((String taskName){ 
-          return CheckboxListTile(
-           title: Text(taskName, style: TextStyle(
-             fontSize: 14,
-             fontWeight: FontWeight.w600,
-             color: Colors.grey.shade800),
-           ),
-           activeColor: Colors.grey.shade800,
-           controlAffinity: ListTileControlAffinity.leading,
-           visualDensity: const VisualDensity(horizontal: 0, vertical: -4),
-           value: _tasks[taskName],
-           onChanged: (bool? value){
-             setState(() {
-               _tasks[taskName]=value!;
-               if(value) {
-                 _score+=10;
-               } else {
-                 _score-=10;
-               }
-             });
-           },
-          );
-        }).toList(),)
+        SizedBox(
+          width: MediaQuery.of(context).size.width*0.99,
+          height: MediaQuery.of(context).size.height*0.3,
+          //tasklistbuilder
+          child: ListView(
+              shrinkWrap: true,
+              children: taskList.keys.map((String taskName){ 
+              return CheckboxListTile(
+               title: Text(taskName, style: TextStyle(
+                 fontSize: 14,
+                 fontWeight: FontWeight.w600,
+                 color: Colors.grey.shade800),
+               ),
+               activeColor: Colors.grey.shade800,
+               controlAffinity: ListTileControlAffinity.leading,
+               visualDensity: const VisualDensity(horizontal: 0, vertical: -1),
+               value: taskList[taskName],
+               onChanged: (bool? value){
+                 setState(() {
+                   taskList[taskName]=value!;
+                   if(value) {
+                     totalScore+=10;
+                   } else {
+                     totalScore-=10;
+                   }
+                   
+                   DataBase.updateTaskStatus(taskName: taskName, status: value, score: totalScore);
+                 });
+               },
+              );
+            }).toList(),),
+          ),
       ],
     );
   }
+
+
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: SingleChildScrollView(
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height*0.9,
-          child: SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height*0.1,
-                ),
-                Flexible(child: _taskScoreBoard(score: _score)),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height*0.01,
-                ),
-                Flexible(child: taskList()),
-              ],
-            ),),
+          child: FutureBuilder<Map<String, dynamic>>(
+            future: DataBase.readTasksList(),
+            builder: (context, snapshot) {
+              if(snapshot.hasData){
+               if(taskList.isEmpty){
+                final userData= snapshot.data;
+                final fulltaskList= Map<String, bool>.from(userData?['tasklist']);
+                totalScore=userData!['score'];
+                //number of tasks
+                int c=0;
+                //shortlisting the number of tasks
+                fulltaskList.forEach((key, value) { if(value==false && c<3 ){ taskList[key]=value; c++; }});
+                   
+               }
+               
+               return SafeArea(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height*0.1,
+                    ),
+                    Flexible(child: _taskScoreBoard(score: totalScore)),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height*0.01,
+                    ),
+                    Flexible(child: taskContainer(context)),
+                  ],
+                ),);
+              }
+              else if(snapshot.hasError){
+                return SafeArea(child: Center(
+                  child: Text(
+                  'Error ${snapshot.error}',
+
+                )));
+              }
+              else{
+                return const SafeArea(child: Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.green,
+                  ),));
+              }
+
+            }
+          ),
         )), 
     );
   }
 }
-
