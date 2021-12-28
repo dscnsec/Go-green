@@ -14,11 +14,11 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(GoGreen());
+  runApp(const GoGreen());
 }
 
 class GoGreen extends StatelessWidget{
-  GoGreen({Key? key}) : super(key: key);
+  const GoGreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
