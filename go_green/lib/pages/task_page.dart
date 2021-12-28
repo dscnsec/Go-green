@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_green/database.dart';
+import 'package:go_green/pages/upload_page.dart';
 
 class TaskPage extends StatefulWidget {
   const TaskPage({Key? key}) : super(key: key);
@@ -97,6 +98,7 @@ class _TaskPageState extends State<TaskPage> {
           height: MediaQuery.of(context).size.height*0.3,
           //tasklistbuilder
           child: ListView(
+              physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
               children: taskList.keys.map((String taskName){ 
               return CheckboxListTile(
@@ -114,10 +116,10 @@ class _TaskPageState extends State<TaskPage> {
                    taskList[taskName]=value!;
                    if(value) {
                      totalScore+=10;
+                     Navigator.push(context, MaterialPageRoute(builder: (context)=> UploadPage(taskName: taskName)));
                    } else {
                      totalScore-=10;
                    }
-                   
                    DataBase.updateTaskStatus(taskName: taskName, status: value, score: totalScore);
                  });
                },
@@ -172,7 +174,7 @@ class _TaskPageState extends State<TaskPage> {
                 return SafeArea(child: Center(
                   child: Text(
                   'Error ${snapshot.error}',
-
+      
                 )));
               }
               else{
@@ -181,7 +183,7 @@ class _TaskPageState extends State<TaskPage> {
                     color: Colors.green,
                   ),));
               }
-
+      
             }
           ),
         )), 
