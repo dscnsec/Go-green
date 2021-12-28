@@ -25,6 +25,7 @@ class GoGreen extends StatelessWidget{
     return ChangeNotifierProvider(
       create: (BuildContext context) => GoogleSignInProvider(),
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           brightness: Brightness.light,
           scaffoldBackgroundColor: Colors.grey.shade200,
