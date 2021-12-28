@@ -12,17 +12,18 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
    int _selectedIndex=0;
   final pages=[
-    TaskPage(),
-    AboutPage(),
+    const TaskPage(),
+    const AboutPage(),
   ];
 
   @override
   Widget build(BuildContext context){
    
    return Scaffold(
-      body: Center(
-             child: pages[_selectedIndex],
-           ),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: pages,
+      ),
       bottomNavigationBar: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
