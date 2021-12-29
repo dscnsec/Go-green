@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_green/database.dart';
+import 'package:go_green/provider/database.dart';
 import 'package:go_green/pages/upload_page.dart';
+import 'package:provider/provider.dart';
 
 class TaskPage extends StatefulWidget {
   const TaskPage({Key? key}) : super(key: key);
@@ -11,11 +12,11 @@ class TaskPage extends StatefulWidget {
 
 class _TaskPageState extends State<TaskPage> {
  
-  int totalScore=0;
-  Map<String, bool> taskList={};
+  //int totalScore=0;
+  //Map<String, bool> taskList={};
 
 
-  Widget _taskScoreBoard({required int score}){
+  Widget _taskScoreBoard(){
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -56,16 +57,16 @@ class _TaskPageState extends State<TaskPage> {
                 ),
                 borderRadius: BorderRadius.circular(10)
               ),
-              child: Text(
-                '$score',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 30, 
-                  fontWeight: FontWeight.w900,
-                  color: Colors.grey.shade800,
-                ),
+              child: Text( 
+                    Provider.of<DataBase>(context).readTotalScore().toString(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 30, 
+                      fontWeight: FontWeight.w900,
+                      color: Colors.grey.shade800,
+                    ),
+                  )
               ),
-            ),
           ],
         )
       ],
@@ -100,7 +101,7 @@ class _TaskPageState extends State<TaskPage> {
           child: ListView(
               physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
-              children: taskList.keys.map((String taskName){ 
+              children: DataBase.taskList.keys.map((String taskName){ 
               return CheckboxListTile(
                title: Text(taskName, style: TextStyle(
                  fontSize: 14,
@@ -110,17 +111,14 @@ class _TaskPageState extends State<TaskPage> {
                activeColor: Colors.grey.shade800,
                controlAffinity: ListTileControlAffinity.leading,
                visualDensity: const VisualDensity(horizontal: 0, vertical: -1),
-               value: taskList[taskName],
+               value: DataBase.taskList[taskName],
                onChanged: (bool? value){
                  setState(() {
-                   taskList[taskName]=value!;
-                   if(value) {
-                     totalScore+=10;
+                   if(value!) {
                      Navigator.push(context, MaterialPageRoute(builder: (context)=> UploadPage(taskName: taskName)));
                    } else {
-                     totalScore-=10;
+                     Provider.of<DataBase>(context, listen: false).updateTask(taskName: taskName, status: value, updateScoreBy: -10);
                    }
-                   DataBase.updateTaskStatus(taskName: taskName, status: value, score: totalScore);
                  });
                },
               );
@@ -140,17 +138,18 @@ class _TaskPageState extends State<TaskPage> {
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height*0.9,
           child: FutureBuilder<Map<String, dynamic>>(
-            future: DataBase.readTasksList(),
+            future: DataBase().readTasksList(),
             builder: (context, snapshot) {
               if(snapshot.hasData){
-               if(taskList.isEmpty){
+
+               if(DataBase.taskList.isEmpty){
                 final userData= snapshot.data;
                 final fulltaskList= Map<String, bool>.from(userData?['tasklist']);
-                totalScore=userData!['score'];
+                DataBase.totalScore=userData!['score'];
                 //number of tasks
                 int c=0;
                 //shortlisting the number of tasks
-                fulltaskList.forEach((key, value) { if(value==false && c<3 ){ taskList[key]=value; c++; }});
+                fulltaskList.forEach((key, value) { if(value==false && c<3 ){ DataBase.taskList[key]=value; c++; }});
                    
                }
                
@@ -162,7 +161,7 @@ class _TaskPageState extends State<TaskPage> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height*0.1,
                     ),
-                    Flexible(child: _taskScoreBoard(score: totalScore)),
+                    Flexible(child: _taskScoreBoard()),
                     SizedBox(
                       height: MediaQuery.of(context).size.height*0.01,
                     ),
@@ -174,7 +173,7 @@ class _TaskPageState extends State<TaskPage> {
                 return SafeArea(child: Center(
                   child: Text(
                   'Error ${snapshot.error}',
-      
+              
                 )));
               }
               else{
@@ -183,7 +182,7 @@ class _TaskPageState extends State<TaskPage> {
                     color: Colors.green,
                   ),));
               }
-      
+              
             }
           ),
         )), 

@@ -8,13 +8,16 @@ import 'package:go_green/provider/google_sign_in.dart';
 import 'package:go_green/utils/routes.dart';
 import 'package:provider/provider.dart';
 import 'pages/welcome_page.dart';
+import 'package:go_green/provider/database.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const GoGreen());
+  runApp(ChangeNotifierProvider(
+        create: (context) => DataBase(),
+        child:const GoGreen()));
 }
 
 class GoGreen extends StatelessWidget{

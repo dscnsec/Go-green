@@ -1,22 +1,31 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_storage/firebase_storage.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _mainCollection = _firestore.collection('users');
 
-class DataBase{
-  static String? userUid;
-  static String? name;
-
+class DataBase extends ChangeNotifier {
+   static String? userUid;
+   static String? name;
+   static Map<String, bool> taskList={};
+   static int totalScore=0;
+//  static bool taskUploadStatus=false;
   /*static getUid() async {
     FirebaseAuth.instance.authStateChanges().listen((user) { userUid= user?.uid; });
   }*/
 
-  static Future<void> addListNewUser() async{
+  readTotalScore(){
+    return totalScore;
+  }
+
+   Future<void> addListNewUser() async{
     print(userUid);
     DocumentReference documentReference = _mainCollection.doc(userUid);
     //converting json to map  
@@ -33,7 +42,7 @@ class DataBase{
    await documentReference.update({'name': FirebaseAuth.instance.currentUser?.displayName});
    }
   
-  static Future<Map<String, dynamic>> readTasksList() async{
+   Future<Map<String, dynamic>> readTasksList() async{
     print("uid inside readTasksList : $userUid");
     DocumentReference userDoc = _mainCollection.doc(userUid);
     final docSnap=await userDoc.get().whenComplete(() => {print("tasklist downloaded")});
@@ -45,18 +54,44 @@ class DataBase{
     }
     if(docSnap.data()==null) 
     {
-      await DataBase.addListNewUser();
+      await addListNewUser();
       return readTasksList();
     }
    return docSnap.data() as Map<String, dynamic>;
   }
 
-  static Future<void> updateTaskStatus({required String taskName, bool? status, int? score})async {
+   Future<void> updateTask({required String taskName, bool? status, int updateScoreBy=0})async {
+    updateLocalTaskAndScore(taskName: taskName, status: status, updateScoreBy: updateScoreBy);
 
     DocumentReference documentReference= _mainCollection.doc(userUid);
 
     documentReference.set({'tasklist':{taskName:status}}, SetOptions(merge: true));
-    documentReference.update({'score':score});
+    documentReference.update({'score':totalScore});
   }
+
+   updateLocalTaskAndScore({required String taskName, bool? status, int updateScoreBy=0}){
+    totalScore+=updateScoreBy;
+    taskList[taskName]=status!;
+    notifyListeners();
+  }
+
+   UploadTask? uploadFile(String destination, File file)  {
+    /*if(file==null) return;
+
+    final fileName = basename(file.path);
+    final destination = 'UserUploads/$userUid/$fileName';
+    */
+    try{
+    final ref= FirebaseStorage.instance.ref(destination) ;
+
+     return ref.putFile(file);
+    }
+    on FirebaseException {
+      return null;
+    }
+
+    
+  }
+
  }
  
