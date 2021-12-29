@@ -164,7 +164,7 @@ class _TaskPageState extends State<TaskPage> {
                       height: MediaQuery.of(context).size.height*0.1,
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height*0.34,
+                      height: 200,
                       child: Column(
                       children: [
                         Container(
@@ -187,7 +187,7 @@ class _TaskPageState extends State<TaskPage> {
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height*0.01,
+                      height: MediaQuery.of(context).size.height*0.08,
                     ),
                     Flexible(child: taskContainer(context)),
                   ],
