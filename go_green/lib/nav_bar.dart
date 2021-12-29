@@ -34,6 +34,7 @@ class _NavBarState extends State<NavBar> {
             gap: 8,
             activeColor: Colors.lightGreen,
             color: Colors.lightGreen,
+            tabShadow: [BoxShadow(color: Colors.grey.withOpacity(0.05), blurRadius: 8)],
             iconSize: 24,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             tabs: const [
