@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:go_green/provider/database.dart';
 import 'package:go_green/pages/upload_page.dart';
@@ -128,8 +129,7 @@ class _TaskPageState extends State<TaskPage> {
     );
   }
 
-
-  @override
+    @override
   Widget build(BuildContext context) {
 
     return Scaffold(
@@ -145,12 +145,14 @@ class _TaskPageState extends State<TaskPage> {
                if(DataBase.taskList.isEmpty){
                 final userData= snapshot.data;
                 final fulltaskList= Map<String, bool>.from(userData?['tasklist']);
-                DataBase.totalScore=userData!['score'];
+                DataBase.name=userData!['name'];
+                DataBase.name=DataBase.name.toString().toCapitalize;
+                DataBase.totalScore=userData['score'];
                 //number of tasks
                 int c=0;
                 //shortlisting the number of tasks
                 fulltaskList.forEach((key, value) { if(value==false && c<3 ){ DataBase.taskList[key]=value; c++; }});
-                   
+                 
                }
                
                return SafeArea(
@@ -161,7 +163,29 @@ class _TaskPageState extends State<TaskPage> {
                     SizedBox(
                       height: MediaQuery.of(context).size.height*0.1,
                     ),
-                    Flexible(child: _taskScoreBoard()),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height*0.34,
+                      child: Column(
+                      children: [
+                        Container(
+                          transform: Matrix4.translationValues(
+                            -5,
+                           -50, 0),
+                          child: SizedBox(
+                            width: 300,
+                            child: Text('Welcome\n${DataBase.name}!', 
+                              softWrap: true,
+                              style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey.shade800
+                            )),
+                          ),
+                        ),
+                        _taskScoreBoard(),
+                      ],
+                      ),
+                    ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height*0.01,
                     ),
@@ -189,3 +213,8 @@ class _TaskPageState extends State<TaskPage> {
     );
   }
 }
+
+extension CapExtension on String {
+    String get toCapitalize => split(" ").map((str)=> str[0].toUpperCase()+str.substring(1)).join(" ");
+} 
+
