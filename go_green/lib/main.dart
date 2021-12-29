@@ -9,6 +9,7 @@ import 'package:go_green/utils/routes.dart';
 import 'package:provider/provider.dart';
 import 'pages/welcome_page.dart';
 import 'package:go_green/provider/database.dart';
+import 'package:flutter/services.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +19,11 @@ void main() async{
   runApp(ChangeNotifierProvider(
         create: (context) => DataBase(),
         child:const GoGreen()));
+  SystemChrome.setSystemUIOverlayStyle( SystemUiOverlayStyle(
+    statusBarColor: Colors.grey.shade200,
+    statusBarIconBrightness: Brightness.dark,
+    systemNavigationBarColor: Colors.grey.shade200,
+  ));
 }
 
 class GoGreen extends StatelessWidget{
@@ -38,6 +44,7 @@ class GoGreen extends StatelessWidget{
               borderRadius: BorderRadius.circular(5)
               )
           )
+          
         ),
         initialRoute: "/",
         routes: {

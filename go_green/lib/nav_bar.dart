@@ -26,7 +26,7 @@ class _NavBarState extends State<NavBar> {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: GNav(
             tabBorderRadius: 10,
             tabBackgroundColor: Colors.white,
