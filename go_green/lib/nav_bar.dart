@@ -12,27 +12,29 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
    int _selectedIndex=0;
   final pages=[
-    TaskPage(),
-    AboutPage(),
+    const TaskPage(),
+    const AboutPage(),
   ];
 
   @override
   Widget build(BuildContext context){
    
    return Scaffold(
-      body: Center(
-             child: pages[_selectedIndex],
-           ),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: pages,
+      ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: GNav(
             tabBorderRadius: 10,
-            tabBackgroundColor: Colors.grey[100]!,
-            rippleColor: Colors.grey[100]!,
+            tabBackgroundColor: Colors.white,
+            rippleColor: Colors.white,
             gap: 8,
             activeColor: Colors.lightGreen,
             color: Colors.lightGreen,
+            tabShadow: [BoxShadow(color: Colors.grey.withOpacity(0.05), blurRadius: 8)],
             iconSize: 24,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             tabs: const [

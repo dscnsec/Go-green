@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:go_green/provider/database.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class GoogleSignInProvider extends ChangeNotifier {
@@ -24,10 +25,14 @@ class GoogleSignInProvider extends ChangeNotifier {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
+    final authResult=await FirebaseAuth.instance.signInWithCredential(credential);
 
-    await FirebaseAuth.instance.signInWithCredential(credential);
+    if(authResult.additionalUserInfo!.isNewUser){
+      await DataBase().addListNewUser();
+    }
+
     } catch (e){
-      print(e.toString());
+      debugPrint(e.toString());
     }
 
     notifyListeners();

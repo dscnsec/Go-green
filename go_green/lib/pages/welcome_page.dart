@@ -15,6 +15,8 @@ class _WelcomePage extends State<WelcomePage>{
   Widget _loginBanner(){
 
           return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                      Container(
                       //top: 25,
@@ -24,7 +26,7 @@ class _WelcomePage extends State<WelcomePage>{
                       fit: BoxFit.contain,
                       scale: 4,
                       ),
-                      transform: Matrix4.translationValues(65, 0, 0)                 
+                      transform: Matrix4.translationValues(15, 0, 0)                 
                     ),
                     Container(
                       //top: 32,
@@ -35,7 +37,7 @@ class _WelcomePage extends State<WelcomePage>{
                           fontWeight: FontWeight.w700,
                           color: Colors.grey[700]
                         )),
-                        transform: Matrix4.translationValues(35, -65, 0)                 
+                        transform: Matrix4.translationValues(0, 10, 0)                 
                         ),
                   ],
           );
@@ -53,7 +55,7 @@ class _WelcomePage extends State<WelcomePage>{
     onPrimary: Colors.white,
     shadowColor: Colors.white,
     shape: RoundedRectangleBorder(
-       borderRadius: BorderRadius.circular(6),
+       borderRadius: BorderRadius.circular(10),
      ),  
      minimumSize: const Size(100, 40) 
     );
@@ -122,7 +124,7 @@ class _WelcomePage extends State<WelcomePage>{
                   onPrimary: Colors.white,
                   shadowColor: Colors.white,
                   shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(10),
                 ),  
                   minimumSize: const Size(80, 40),
                   maximumSize: const Size(190, 80),
