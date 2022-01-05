@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_green/provider/database.dart';
 import 'package:go_green/pages/upload_page.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
+
 
 class TaskPage extends StatefulWidget {
   const TaskPage({Key? key}) : super(key: key);
@@ -11,11 +13,40 @@ class TaskPage extends StatefulWidget {
   _TaskPageState createState() => _TaskPageState();
 }
 
-class _TaskPageState extends State<TaskPage> {
+class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver {
  
   //int totalScore=0;
   //Map<String, bool> taskList={};
 
+  String _currentDate='';
+  String _newDate='';
+   
+  @override
+  void initState() {
+    super.initState();
+    _currentDate=_initializeDate();
+    WidgetsBinding.instance?.addObserver(this);
+  }
+
+  @override
+  void dispose(){
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
+
+  String _initializeDate() {
+    final now= DateTime.now();
+
+    String _date = DateFormat('dd-MM-yyyy').format(now);
+
+    return _date;
+  }
+
+  bool _checkNewDay() {
+    _newDate= _initializeDate();
+    debugPrint('Current Date = $_currentDate : New Date = $_newDate');
+    return _newDate!=_currentDate;
+  }
 
   Widget _taskScoreBoard(){
 
@@ -141,18 +172,20 @@ class _TaskPageState extends State<TaskPage> {
             future: DataBase().readTasksList(),
             builder: (context, snapshot) {
               if(snapshot.hasData){
+               if(DataBase.taskList.isEmpty || _checkNewDay() ){
+                _currentDate=_newDate;
 
-               if(DataBase.taskList.isEmpty){
                 final userData= snapshot.data;
                 final fulltaskList= Map<String, bool>.from(userData?['tasklist']);
                 DataBase.name=userData!['name'];
                 DataBase.name=DataBase.name.toString().toCapitalize;
                 DataBase.totalScore=userData['score'];
+                //clearing old tasks
+                DataBase.taskList.clear();
                 //number of tasks
-                int c=0;
+                int c=3;
                 //shortlisting the number of tasks
-                fulltaskList.forEach((key, value) { if(value==false && c<3 ){ DataBase.taskList[key]=value; c++; }});
-                 
+                fulltaskList.forEach((key, value) { if(value==false && c>0 ){ DataBase.taskList[key]=value; c--; }});
                }
                
                return SafeArea(
@@ -212,6 +245,26 @@ class _TaskPageState extends State<TaskPage> {
           ),
         )), 
     );
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state){
+    switch(state){
+      case AppLifecycleState.inactive:
+      debugPrint("Inactive");
+      break;
+      
+      case AppLifecycleState.paused:
+      debugPrint("Paused");
+      break;
+
+      case AppLifecycleState.resumed:
+      debugPrint("Resumed");
+      break;
+
+      case AppLifecycleState.detached:
+      debugPrint("Detached");
+    }
   }
 }
 
