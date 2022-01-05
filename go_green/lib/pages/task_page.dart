@@ -173,6 +173,7 @@ class _TaskPageState extends State<TaskPage> {
                            -50, 0),
                           child: SizedBox(
                             width: 300,
+                            height: 70,
                             child: Text('Welcome\n${DataBase.name}!', 
                               softWrap: true,
                               style: TextStyle(
