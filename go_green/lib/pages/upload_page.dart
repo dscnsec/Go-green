@@ -119,16 +119,17 @@ class _UploadPageState extends State<UploadPage> {
                         height: 30,
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
-                            width: MediaQuery.of(context).size.width*0.08,
+                            width: MediaQuery.of(context).size.width*0.02,
                           ),
                           const Icon(
                             Icons.task_rounded,
                           ),
                           const SizedBox( width: 10,),
                           SizedBox(
-                            width: 280,
+                            width: 255,
                             child: Text(
                               widget.taskName,
                               style: TextStyle(
