@@ -12,48 +12,100 @@ class AboutPage extends StatefulWidget {
 
 class _AboutPageState extends State<AboutPage> {
 
-    //*******************************************//
-   //           temporay about page             //
-  //*******************************************//
-
   final googleUser = FirebaseAuth.instance.currentUser!;
 
   @override
   Widget build(BuildContext context) {
+    final textStyle1= TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+      color: Colors.grey.shade800
+    );
+
+    final textStyle2 = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: Colors.grey.shade800
+    );
     return Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    backgroundImage: Image.network(googleUser.photoURL ?? '').image,
-                    radius: 80,
-                    backgroundColor: Colors.lightGreen,
+                  const SizedBox(
+                    height: 70,
+                  ),
+                  ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    child: Image.network(
+                      googleUser.photoURL ?? '', 
+                      width: 130,
+                      height: 130,
+                      fit: BoxFit.fill,
+                      //color: Colors.lightGreen,
+                      ),
+                    //radius: 70,
+                    //backgroundColor: Colors.lightGreen,
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: 50,
                   ),
-                  Text(
-                    googleUser.displayName ?? '',
-                    style: const TextStyle(
-                      fontSize: 25,
-                    )),
-                  Text(
-                    googleUser.email ?? '',
-                    style: const TextStyle(
-                      fontSize: 15,
+                  Flexible(
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width*0.85,
+                          child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Account Details: ',
+                              style: textStyle1),
+                              const SizedBox( height: 20,),
+                              Text(
+                                "Name: ${googleUser.displayName ?? ''}",
+                                style: textStyle2,
+                              ),
+                              Text(
+                              "Email: ${googleUser.email ?? ''}",
+                              style: textStyle2,
+                              ),
+                            ],
+                          ),
+                        ),
+                  
+                        const SizedBox(
+                            height: 30,
+                        ),
+                        ActionChip(
+                          avatar: const Icon(Icons.login_rounded),
+                          label: const Text('Logout', style: TextStyle(fontWeight: FontWeight.bold),),
+                          labelPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          onPressed: (){
+                            final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+                            provider.logout();
+                        }), 
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width*0.85,
+                          height: 100,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('About:',
+                              style: textStyle1,),
+                              const SizedBox( height: 20,) ,
+                              Text(
+                                'GoGreen: A task based game to make the world a better place by completing one task at a time.',
+                                style: textStyle2),
+                            ],
+                          ),
+                        )
+                      ],
                     ),
-                    ),
-                  const SizedBox(
-                      height: 20,
                   ),
-                  ActionChip(
-                    avatar: const Icon(Icons.logout),
-                    label: const Text('Logout'),
-                    onPressed: (){
-                      final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
-                      provider.logout();
-                  }) 
                 ]
               ),
             );
