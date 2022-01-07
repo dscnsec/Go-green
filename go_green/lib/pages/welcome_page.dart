@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_green/provider/google_sign_in.dart';
-import 'package:go_green/utils/routes.dart';
 import 'package:provider/provider.dart';
 
 class WelcomePage extends StatefulWidget{
