@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_green/provider/google_sign_in.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/link.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({Key? key}) : super(key: key);
@@ -32,8 +35,8 @@ class _AboutPageState extends State<AboutPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 70,
+                   SizedBox(
+                    height: MediaQuery.of(context).size.height*0.1,
                   ),
                   ClipRRect(
                     borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -90,7 +93,6 @@ class _AboutPageState extends State<AboutPage> {
                         ),
                         SizedBox(
                           width: MediaQuery.of(context).size.width*0.85,
-                          height: 100,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -100,9 +102,33 @@ class _AboutPageState extends State<AboutPage> {
                               Text(
                                 'GoGreen: A task based game to make the world a better place by completing one task at a time.',
                                 style: textStyle2),
+                                const SizedBox( height: 20),
+                              Text('Links:',
+                              style: textStyle1) ,
+                              const SizedBox( height: 20),
+                              Row(
+                                children: [
+                                  Text('Source code: ', 
+                                  style: textStyle2),
+                                  Link(
+                                    uri: Uri.parse("https://github.com/SP-XD/Go-green"), 
+                                    builder: (context, followLink) => GestureDetector(
+                                      onTap: followLink,
+                                      child: Text( 'Github',
+                                             style: TextStyle(
+                                               fontSize: 14,
+                                               fontWeight: FontWeight.w600,
+                                               color: Colors.lightGreen.shade600
+                                             ))
+                                    ),
+                                    ),
+                                ],
+                              ),
                             ],
                           ),
-                        )
+                        ),
+                        const SizedBox( height: 50),
+                        const Text('Made with 💚 in India')
                       ],
                     ),
                   ),
