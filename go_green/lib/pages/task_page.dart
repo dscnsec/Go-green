@@ -165,6 +165,7 @@ class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver {
 
     return Scaffold(
       body: SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height*0.9,
