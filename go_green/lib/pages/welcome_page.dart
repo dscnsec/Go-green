@@ -44,56 +44,14 @@ class _WelcomePage extends State<WelcomePage>{
   }
 
 
-  Widget _loginWithEmail(BuildContext context){
+  Widget _loginWithGmail(BuildContext context){
 
-    final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
-    textStyle: const TextStyle(
-      fontSize: 15,
-      fontWeight: FontWeight.bold,
-    ),
-    primary : Colors.orange.shade400,
-    onPrimary: Colors.white,
-    shadowColor: Colors.white,
-    shape: RoundedRectangleBorder(
-       borderRadius: BorderRadius.circular(10),
-     ),  
-     minimumSize: const Size(100, 40) 
-    );
 
     return Column(
       children:[
           Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: (){}, 
-                    child: const Text('Login'),
-                    style: buttonStyle,
-                 ),
-                 const SizedBox(
-                   width: 20,
-                 ),
-                 ElevatedButton(
-                   onPressed: (){}, 
-                   child: const Text('Register'),
-                   style: buttonStyle,
-                   )
-
-              ],),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text(
-                'OR',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey,
-                )
-              ), 
-              const SizedBox(
-                height: 20,
-              ),
               ElevatedButton(
                 onPressed: () {
                   final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
@@ -130,7 +88,7 @@ class _WelcomePage extends State<WelcomePage>{
                   maximumSize: const Size(190, 80),
                ),
               ), 
-      ]);
+      ])]);
   }
 
   @override
@@ -166,10 +124,10 @@ class _WelcomePage extends State<WelcomePage>{
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(
-                height: 70,
+              SizedBox(
+                height: MediaQuery.of(context).size.height*0.1,
               ),
-              Flexible(child: _loginWithEmail(context)) 
+              Flexible(child: _loginWithGmail(context)) 
              ],
            ),
         ),
