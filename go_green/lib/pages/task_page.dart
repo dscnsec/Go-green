@@ -194,28 +194,31 @@ class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: MediaQuery.of(context).size.height*0.1,
+                      height: MediaQuery.of(context).size.height*0.05,
                     ),
                     SizedBox(
-                      height: 200,
+                      height: 230,
                       child: Column(
                       children: [
-                        Container(
-                          transform: Matrix4.translationValues(
-                            -5,
-                           -50, 0),
-                          child: SizedBox(
-                            width: 300,
-                            height: 70,
-                            child: Text('Welcome\n${DataBase.name}!', 
-                              softWrap: true,
-                              style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.grey.shade800
-                            )),
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox( width: 25,),
+                            SizedBox(
+                              width: 300,
+                              height: 70,
+                              child: Text('Welcome\n${DataBase.name}!', 
+                                softWrap: true,
+                                style: TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey.shade800
+                              )),
+                            ),
+                          ],
                         ),
+                        const SizedBox(height: 30,),
                         _taskScoreBoard(),
                       ],
                       ),
