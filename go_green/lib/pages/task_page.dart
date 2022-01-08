@@ -13,7 +13,7 @@ class TaskPage extends StatefulWidget {
   _TaskPageState createState() => _TaskPageState();
 }
 
-class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver {
+class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver, AutomaticKeepAliveClientMixin {
  
   //int totalScore=0;
   //Map<String, bool> taskList={};
@@ -162,7 +162,7 @@ class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver {
 
     @override
   Widget build(BuildContext context) {
-
+    super.build(context);
     return Scaffold(
       body: SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
@@ -270,6 +270,10 @@ class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver {
       debugPrint("Detached");
     }
   }
+
+  @override
+  bool get wantKeepAlive => true;
+
 }
 
 extension CapExtension on String {

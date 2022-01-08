@@ -16,12 +16,18 @@ class _NavBarState extends State<NavBar> {
     const AboutPage(),
   ];
 
+  final PageController _pageController= PageController(initialPage: 0, keepPage: true);
+
   @override
   Widget build(BuildContext context){
-   
+
    return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
+      body: PageView(
+        physics: const BouncingScrollPhysics(),
+        controller: _pageController,
+        onPageChanged: (index){
+          setState(()=> _selectedIndex=index);
+        },
         children: pages,
       ),
       bottomNavigationBar: SafeArea(
@@ -49,15 +55,15 @@ class _NavBarState extends State<NavBar> {
             ],
             selectedIndex: _selectedIndex,
             onTabChange: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
+              
+            _selectedIndex=index;
+            _pageController.animateToPage(_selectedIndex, duration: const Duration(milliseconds: 500), curve: Curves.decelerate);
+
+            }
           ),
         ),
       ),
      
          );
   }
-  
 }
