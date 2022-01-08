@@ -23,7 +23,7 @@ class _WelcomePage extends State<WelcomePage>{
                       child: Image.asset(
                       'assets/images/login_image.png',
                       fit: BoxFit.contain,
-                      scale: 4,
+                      scale: 5,
                       ),
                       transform: Matrix4.translationValues(15, 0, 0)                 
                     ),
@@ -104,7 +104,7 @@ class _WelcomePage extends State<WelcomePage>{
              mainAxisAlignment: MainAxisAlignment.start,
              children: [
                SizedBox(
-                 height: MediaQuery.of(context).size.height*0.16,
+                 height: MediaQuery.of(context).size.height*0.15,
                ),
               Flexible(
                 child: Container(
@@ -119,14 +119,14 @@ class _WelcomePage extends State<WelcomePage>{
                 'A task based game!',
                 style: TextStyle(
                   color: Colors.grey.shade700,
-                  fontSize: 15,
+                  fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height*0.1,
+                height: MediaQuery.of(context).size.height*0.15,
               ),
-              Flexible(child: _loginWithGmail(context)) 
+             _loginWithGmail(context) 
              ],
            ),
         ),
