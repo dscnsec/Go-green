@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _mainCollection = _firestore.collection('users');
@@ -72,6 +74,14 @@ class DataBase extends ChangeNotifier {
    updateLocalTaskAndScore({required String taskName, bool? status, int updateScoreBy=0}){
     totalScore+=updateScoreBy;
     taskList[taskName]=status!;
+    
+    LocalDatabase localdb=LocalDatabase();
+    localdb.initDB().whenComplete(() {
+      localdb.updateUser();
+      localdb.updateTask(taskName, status);
+      }
+    );
+
     notifyListeners();
   }
 
@@ -93,5 +103,99 @@ class DataBase extends ChangeNotifier {
     
   }
 
- }
+   }
+
+//local sqlite database
+class LocalDatabase extends ChangeNotifier{
+
+  var db;
+  
+  void fromMapUser(Map<String, dynamic> res){
+     DataBase.userUid = res["id"];
+     DataBase.name = res["name"];
+     DataBase.totalScore = res["totalScore"];
+  }
+
+  Map<String, dynamic> toMapUser(){
+    return {'id': "${DataBase.userUid}", 'name': "${DataBase.name}", 'totalScore': DataBase.totalScore};
+  }
+
+   Future<void> initDB()  async{
+     String path = await getDatabasesPath();
+      db= await openDatabase(
+       join(path, 'local_user.db'),
+       onCreate: (database, version) async{
+         await database.execute(
+          """
+            CREATE TABLE users (
+              id TEXT NOT NULL,
+              name TEXT NOT NULL,
+              totalScore INTEGER NOT NULL
+            );
+          """
+          );
+          await database.execute(
+          """
+            CREATE TABLE tasklist (
+              taskName TEXT NOT NULL,
+              status INTEGER NOT NULL CHECK (status IN (0,1))
+            );
+          """
+         );
+       },
+       version: 1,
+     );
+     
+   }
+  
+  //user related operations
+  Future<void> insertUser() async{
+    await db.insert('users', toMapUser(), conflictAlgorithm: ConflictAlgorithm.replace);
+    //await db.rawInsert("""INSERT OR REPLACE INTO users (id, name, totalScore) VALUES ('${DataBase.userUid}', '${DataBase.name}', ${DataBase.totalScore}); """);
+    var localUser=await db.query('users');
+    debugPrint("local user inside insertUser: $localUser");
+  }
+
+  Future<void> updateUser() async{
+    await db.update('users', toMapUser(), where: "id = ?", whereArgs: ["${DataBase.userUid}"]);
+    var localUser=await db.query('users');
+    debugPrint("local user inside updateUser: $localUser");
+  }
+
+  Future<void> retrieveUser() async{
+    final List<Map<String, dynamic>> queryResult = await db.query('users');
+    debugPrint("local user inside retrieveUser : $queryResult");
+    for (var element in queryResult) {fromMapUser(element);}
+  }
+
+  Future<void> deleteUser() async{
+    await db.delete('users');
+  }
+  
+  //task related operations
+  Future<void> insertTask(Map<String, bool> tasklist)async {
+    tasklist.forEach((key, value) {db.insert('tasklist', {'taskName': key, 'status': value?1:0 }, conflictAlgorithm: ConflictAlgorithm.replace);});
+    final List<Map<String, dynamic>> queryResult = await db.query('tasklist');
+    debugPrint("local database tasklist inside insertTask: $queryResult");
+  }
+
+  Future<void> updateTask(String taskName, bool status) async {
+    await db.update('tasklist', {'taskName': taskName, 'status': status?1:0}, where: "taskName = ?", whereArgs: [taskName]);
+    final List<Map<String, dynamic>> queryResult = await db.query('tasklist');
+    debugPrint("local database tasklist inside updateTask: $queryResult");
+  }
+
+  Future<void> retrieveTaskList() async{
+    final List<Map<String, dynamic>> queryResult = await db.query('tasklist');
+    debugPrint("local database tasklist inside retrieveTask: $queryResult");
+    for (var element in queryResult) {
+      DataBase.taskList[element['taskName']]=element['status']==1?true:false;
+    }
+
+  }
+
+  Future<void> deleteTaskList() async{
+    await db.delete('tasklist');
+  }
+}
  

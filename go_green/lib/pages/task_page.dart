@@ -20,11 +20,16 @@ class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver, Automa
 
   String _currentDate='';
   String _newDate='';
-   
+
+  var localdb=LocalDatabase();   
+
   @override
   void initState() {
     super.initState();
     _currentDate=_initializeDate();
+    localdb.initDB().whenComplete(()  async { 
+      setState((){});
+    });
     WidgetsBinding.instance?.addObserver(this);
   }
 
@@ -149,7 +154,7 @@ class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver, Automa
                    if(value!) {
                      Navigator.push(context, MaterialPageRoute(builder: (context)=> UploadPage(taskName: taskName)));
                    } else {
-                     Provider.of<DataBase>(context, listen: false).updateTask(taskName: taskName, status: value, updateScoreBy: -10);
+                     Provider.of<DataBase>(context, listen: false).updateTask(taskName: taskName, status: value, updateScoreBy: -10 );
                    }
                  });
                },
@@ -159,6 +164,8 @@ class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver, Automa
       ],
     );
   }
+
+  bool isLoading=true;
 
     @override
   Widget build(BuildContext context) {
@@ -173,22 +180,47 @@ class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver, Automa
             future: DataBase().readTasksList(),
             builder: (context, snapshot) {
               if(snapshot.hasData){
-               if(DataBase.taskList.isEmpty || _checkNewDay() ){
-                _currentDate=_newDate;
+                if(DataBase.taskList.isEmpty || _checkNewDay() ){
+                  
+                  //retrieving data from local database
+                 if(!_checkNewDay()){
+                   debugPrint("calling localdb");
+                   DataBase.taskList.clear();
+                   localdb.retrieveUser().whenComplete(() => setState((){}));
+                   localdb.retrieveTaskList().whenComplete(() => isLoading=false);
+                 }
+                 //retrieving data from firestore 
+                 //first time login and for new day 
+                 if(DataBase.taskList.isEmpty && !isLoading || _checkNewDay()){
+                  _currentDate=_newDate;
+                 //clearing old tasks
+                 DataBase.taskList.clear();
+                 debugPrint("inside second if else taskList empty");
+  
+                 final userData= snapshot.data;
+                 final fulltaskList= Map<String, bool>.from(userData?['tasklist']);
+                 DataBase.name=userData!['name'];
+                 DataBase.name=DataBase.name.toString().toCapitalize;
+                 DataBase.totalScore=userData['score'];
+                                 //number of tasks
+                 int c=3;
+                 //shortlisting the number of tasks
+                 fulltaskList.forEach((key, value) { if(value==false && c>0 ){ DataBase.taskList[key]=value; c--; }});
+                  
+                 //deleting old local database
+                 localdb.deleteUser().whenComplete(() => 
+                   //adding to local database
+                   localdb.insertUser()
+                 );
+                 //deleting old local database
+                 localdb.deleteTaskList().whenComplete(() => 
+                   //adding to local database
+                   localdb.insertTask(DataBase.taskList) 
+                 );
+                 }
+                }
 
-                final userData= snapshot.data;
-                final fulltaskList= Map<String, bool>.from(userData?['tasklist']);
-                DataBase.name=userData!['name'];
-                DataBase.name=DataBase.name.toString().toCapitalize;
-                DataBase.totalScore=userData['score'];
-                //clearing old tasks
-                DataBase.taskList.clear();
-                //number of tasks
-                int c=3;
-                //shortlisting the number of tasks
-                fulltaskList.forEach((key, value) { if(value==false && c>0 ){ DataBase.taskList[key]=value; c--; }});
-               }
-               
+                
                return SafeArea(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -230,6 +262,7 @@ class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver, Automa
                     Flexible(child: taskContainer(context)),
                   ],
                 ),);
+                
               }
               else if(snapshot.hasError){
                 return SafeArea(child: Center(
