@@ -42,13 +42,15 @@ class _AboutPageState extends State<AboutPage> {
                     ),
                     ClipRRect(
                       borderRadius: const BorderRadius.all(Radius.circular(20)),
-                      child: Image.network(
-                        googleUser.photoURL ?? '', 
-                        width: 130,
-                        height: 130,
-                        fit: BoxFit.fill,
-                        //color: Colors.lightGreen,
-                        ),
+                      child: FadeInImage(
+                          width: 130,
+                          height: 130,
+                          fit: BoxFit.fill,
+                        image: NetworkImage(
+                          googleUser.photoURL ?? 'assets/images/account_image.png', 
+                          //color: Colors.lightGreen,
+                          ), placeholder: const AssetImage('assets/images/account_image.png'),
+                      ),
                       //radius: 70,
                       //backgroundColor: Colors.lightGreen,
                     ),
