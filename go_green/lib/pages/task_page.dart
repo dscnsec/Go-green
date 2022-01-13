@@ -18,7 +18,6 @@ class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver, Automa
   //int totalScore=0;
   //Map<String, bool> taskList={};
 
-  String _currentDate='';
   String _newDate='';
 
   var localdb=LocalDatabase();   
@@ -26,7 +25,7 @@ class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver, Automa
   @override
   void initState() {
     super.initState();
-    _currentDate=_initializeDate();
+    DataBase.currentDate="12-01-2022";//_initializeDate();
     localdb.initDB().whenComplete(()  async { 
       setState((){});
     });
@@ -49,8 +48,8 @@ class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver, Automa
 
   bool _checkNewDay() {
     _newDate= _initializeDate();
-    debugPrint('Current Date = $_currentDate : New Date = $_newDate');
-    return _newDate!=_currentDate;
+    debugPrint('Current Date = ${DataBase.currentDate} : New Date = $_newDate');
+    return _newDate!=DataBase.currentDate;
   }
 
   Widget _taskScoreBoard(){
@@ -182,7 +181,7 @@ class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver, Automa
               if(snapshot.hasData){
                 if(DataBase.taskList.isEmpty || _checkNewDay() ){
                   
-                  //retrieving data from local database
+                 //retrieving data from local database
                  if(!_checkNewDay()){
                    debugPrint("calling localdb");
                    DataBase.taskList.clear();
@@ -192,7 +191,7 @@ class _TaskPageState extends State<TaskPage> with WidgetsBindingObserver, Automa
                  //retrieving data from firestore 
                  //first time login and for new day 
                  if(DataBase.taskList.isEmpty && !isLoading || _checkNewDay()){
-                  _currentDate=_newDate;
+                 DataBase.currentDate=_newDate;
                  //clearing old tasks
                  DataBase.taskList.clear();
                  debugPrint("inside second if else taskList empty");

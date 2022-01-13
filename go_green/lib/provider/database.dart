@@ -18,6 +18,8 @@ class DataBase extends ChangeNotifier {
    static String? name;
    static Map<String, bool> taskList={};
    static int totalScore=0;
+   static String currentDate='';
+
 //  static bool taskUploadStatus=false;
   /*static getUid() async {
     FirebaseAuth.instance.authStateChanges().listen((user) { userUid= user?.uid; });
@@ -114,10 +116,11 @@ class LocalDatabase extends ChangeNotifier{
      DataBase.userUid = res["id"];
      DataBase.name = res["name"];
      DataBase.totalScore = res["totalScore"];
+     DataBase.currentDate=res["taskFetchDate"];
   }
 
   Map<String, dynamic> toMapUser(){
-    return {'id': "${DataBase.userUid}", 'name': "${DataBase.name}", 'totalScore': DataBase.totalScore};
+    return {'id': "${DataBase.userUid}", 'name': "${DataBase.name}", 'totalScore': DataBase.totalScore, 'taskFetchDate': DataBase.currentDate};
   }
 
    Future<void> initDB()  async{
@@ -130,7 +133,8 @@ class LocalDatabase extends ChangeNotifier{
             CREATE TABLE users (
               id TEXT NOT NULL,
               name TEXT NOT NULL,
-              totalScore INTEGER NOT NULL
+              totalScore INTEGER NOT NULL,
+              taskFetchDate TEXT NOT NULL
             );
           """
           );
