@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_green/provider/database.dart';
 import 'package:go_green/provider/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/link.dart';
@@ -89,6 +90,15 @@ class _AboutPageState extends State<AboutPage> {
                             labelPadding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                             onPressed: (){
+
+                              //deleting local database on logout
+                              LocalDatabase localdb=LocalDatabase();
+                              localdb.initDB().whenComplete(() {
+                              localdb.deleteTaskList();
+                              localdb.deleteUser();
+                              debugPrint("deleted local database");
+                              });
+
                               final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
                               provider.logout();
                           }), 
