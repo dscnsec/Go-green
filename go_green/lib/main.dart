@@ -1,72 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:go_green/firebase_options.dart';
+import 'package:go_green/gogreen_home.dart';
+import 'package:go_green/pages/about_page.dart';
+import 'package:go_green/pages/task_page.dart';
+import 'package:go_green/provider/google_sign_in.dart';
+import 'package:go_green/utils/routes.dart';
+import 'package:provider/provider.dart';
+import 'pages/welcome_page.dart';
+import 'package:go_green/provider/database.dart';
+import 'package:flutter/services.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(ChangeNotifierProvider(
+        create: (context) => DataBase(),
+        child:const GoGreen()));
+  SystemChrome.setSystemUIOverlayStyle( SystemUiOverlayStyle(
+    statusBarColor: Colors.grey.shade200,
+    statusBarIconBrightness: Brightness.dark,
+    systemNavigationBarColor: Colors.grey.shade200,
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class GoGreen extends StatelessWidget{
+  const GoGreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-
-        title: Text(widget.title),
-      ),
-      body: Center(
-
-        child: Column(
-
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => GoogleSignInProvider(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          brightness: Brightness.light,
+          scaffoldBackgroundColor: Colors.grey.shade200,
+          fontFamily: 'Roboto',
+          checkboxTheme: CheckboxThemeData(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5)
+              )
+          )
+          
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        initialRoute: "/",
+        routes: {
+          "/": (context) => const GoGreenHome(),
+          MyRoutes.welcomeRoute : (context) => const WelcomePage(),
+          MyRoutes.taskPage : (context) => TaskPage(),
+          MyRoutes.aboutRoute : (context) => const AboutPage(),
+        }
       ),
     );
   }
+
 }
+
+
+
